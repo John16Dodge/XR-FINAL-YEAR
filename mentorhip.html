@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request a Mentor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #2d3748;
+      transition: background 0.5s ease, color 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body.dark-mode {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: #e5e7eb;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.5;
+      background: linear-gradient(45deg, #a5b4fc, #60a5fa, #8b5cf6, #a5b4fc);
+      background-size: 400%;
+      animation: gradientWave 15s ease infinite;
+    }
+
+    body.dark-mode .background {
+      background: linear-gradient(45deg, #1e3a8a, #2f855a, #374151, #1e3a8a);
+    }
+
+    @keyframes gradientWave {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .background {
+        animation: none;
+        background: #ffffff;
+      }
+      body.dark-mode .background {
+        background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      }
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transition: background 0.3s ease, transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    body.dark-mode .container {
+      background: #374151;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #1a73e8;
+    }
+
+    body.dark-mode h1 {
+      background: linear-gradient(to right, #60a5fa, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h1 i {
+      font-size: 1.2em;
+      transition: color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+      -webkit-text-fill-color: #1a73e8;
+    }
+
+    body.dark-mode h1 i {
+      -webkit-text-fill-color: #60a5fa;
+    }
+
+    h1 i:hover {
+      transform: rotate(15deg);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .phone-container {
+      position: relative;
+    }
+
+    .phone-error {
+      color: #ff6f61;
+      font-size: 0.95em;
+      margin-top: 5px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    body.dark-mode .phone-error {
+      color: #ff9b8e;
+    }
+
+    .phone-error.show {
+      opacity: 1;
+    }
+
+    input, select, textarea {
+      padding: 12px;
+      font-size: 1em;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #2d3748;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode textarea {
+      background: #4b5563;
+      border-color: #6b7280;
+      color: #e5e7eb;
+    }
+
+    input:hover, select:hover, textarea:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 8px rgba(26, 115, 232, 0.3);
+    }
+
+    body.dark-mode input:focus,
+    body.dark-mode select:focus,
+    body.dark-mode textarea:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 8px rgba(96, 165, 250, 0.3);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      max-height: 200px;
+    }
+
+    button {
+      padding: 14px 24px;
+      font-size: 1.1em;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #submit-btn {
+      background: linear-gradient(to right, #1a73e8, #ef4444);
+      color: white;
+    }
+
+    body.dark-mode #submit-btn {
+      background: linear-gradient(to right, #60a5fa, #ef4444);
+    }
+
+    #submit-btn:hover {
+      background: linear-gradient(to right, #ef4444, #1a73e8);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+    }
+
+    body.dark-mode #submit-btn:hover {
+      box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
+    }
+
+    #toggle-theme {
+      background: linear-gradient(to right, #6b7280, #4b5563);
+      color: white;
+      margin-top: 20px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    body.dark-mode #toggle-theme {
+      background: linear-gradient(to right, #6b7280, #4b5563);
+    }
+
+    #toggle-theme:hover {
+      background: linear-gradient(to right, #4b5563, #6b7280);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+    }
+
+    #toggle-theme i {
+      font-size: 1.2em;
+      color: #ffffff;
+      transition: transform 0.3s ease;
+    }
+
+    #toggle-theme:hover i {
+      transform: rotate(15deg);
+    }
+
+    body.light-mode #toggle-theme i {
+      color: #2d3748;
+    }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px;
+      background: #22c55e;
+      color: white;
+      border-radius: 8px;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    body.dark-mode .success-message {
+      background: #2f855a;
+    }
+
+    .success-message.active {
+      display: block;
+    }
+
+    .error {
+      border-color: #ef4444 !important;
+      animation: shake 0.3s ease;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px auto;
+        padding: 20px;
+      }
+      input, select, textarea {
+        font-size: 0.95em;
+      }
+      button {
+        width: 100%;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+  </style>
+</head>
+<body class="light-mode">
+  <div class="background"></div>
+  <div class="container">
+    <h1 id="mentorship-heading" aria-label="Request a Mentor with theme toggle">
+      Request a Mentor <i id="title-icon" class="fas fa-sun" role="button" tabindex="0" aria-label="Toggle theme"></i>
+    </h1>
+    <form id="mentorship-form" class="form-group">
+      <input type="text" id="full-name" placeholder="Full Name" aria-label="Enter your full name" required>
+      <input type="email" id="email" placeholder="Email Address" aria-label="Enter your email address" required>
+      <div class="phone-container">
+        <input type="tel" id="phone" placeholder="10-digit Mobile Number (e.g., 9876543210)" aria-label="Enter your 10-digit mobile number" required>
+        <span class="phone-error" id="phone-error" aria-live="polite"></span>
+      </div>
+      <select id="department" aria-label="Select your department" required>
+        <option value="" disabled selected>Select Department</option>
+        <option value="CSE">Computer Science (CSE)</option>
+        <option value="EEE">Electrical Engineering (EEE)</option>
+        <option value="ECE">Electronics (ECE)</option>
+        <option value="MECH">Mechanical (MECH)</option>
+        <option value="CIVIL">Civil Engineering (CIVIL)</option>
+        <option value="BBA">Business Administration (BBA)</option>
+        <option value="Others">Others</option>
+      </select>
+      <select id="mentorship-area" aria-label="Select mentorship area" required>
+        <option value="" disabled selected>Select Mentorship Area</option>
+        <option value="Career Guidance">Career Guidance</option>
+        <option value="Resume Building">Resume Building</option>
+        <option value="Coding Help">Coding Help</option>
+        <option value="Interview Preparation">Interview Preparation</option>
+        <option value="Research Assistance">Research Assistance</option>
+        <option value="Entrepreneurship Mentoring">Entrepreneurship Mentoring</option>
+      </select>
+      <textarea id="message" placeholder="Describe your mentorship needs or goals" aria-label="Describe your mentorship needs" required></textarea>
+      <button type="submit" id="submit-btn" aria-label="Submit mentorship request">Submit</button>
+    </form>
+    <div id="success-message" class="success-message" aria-live="polite">
+      Thank You! Your request has been sent via WhatsApp.
+    </div>
+    <button id="toggle-theme" aria-label="Toggle theme">Switch to Dark Mode</button>
+  </div>
+
+  <script>
+    // DOM Elements
+    const elements = {
+      form: document.getElementById('mentorship-form'),
+      fullName: document.getElementById('full-name'),
+      email: document.getElementById('email'),
+      phone: document.getElementById('phone'),
+      phoneError: document.getElementById('phone-error'),
+      department: document.getElementById('department'),
+      mentorshipArea: document.getElementById('mentorship-area'),
+      message: document.getElementById('message'),
+      submitBtn: document.getElementById('submit-btn'),
+      successMessage: document.getElementById('success-message'),
+      toggleThemeBtn: document.getElementById('toggle-theme'),
+      titleIcon: document.getElementById('title-icon')
+    };
+
+    // Theme Management
+    const updateThemeIcons = (isDarkMode) => {
+      elements.toggleThemeBtn.innerHTML = '';
+      const buttonIcon = document.createElement('i');
+      buttonIcon.classList.add('fas', isDarkMode ? 'fa-moon' : 'fa-sun');
+      elements.toggleThemeBtn.appendChild(buttonIcon);
+      elements.toggleThemeBtn.appendChild(document.createTextNode(isDarkMode ? ' Switch to Light Mode' : ' Switch to Dark Mode'));
+      elements.titleIcon.classList.remove('fa-moon', 'fa-sun');
+      elements.titleIcon.classList.add(isDarkMode ? 'fa-moon' : 'fa-sun');
+      elements.toggleThemeBtn.setAttribute('aria-label', isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    };
+
+    const toggleTheme = () => {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      document.body.classList.toggle('dark-mode');
+      document.body.classList.toggle('light-mode');
+      updateThemeIcons(!isDarkMode);
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    };
+
+    // Form Validation and WhatsApp Redirect
+    const validatePhoneNumber = (phone) => /^\d{10}$/.test(phone);
+
+    const showPhoneError = (message) => {
+      elements.phoneError.textContent = message;
+      elements.phoneError.classList.add('show');
+      elements.phone.classList.add('error');
+      setTimeout(() => {
+        elements.phoneError.classList.remove('show');
+        elements.phone.classList.remove('error');
+      }, 3000);
+    };
+
+    const validateForm = () => {
+      let isValid = true;
+      const fields = [elements.fullName, elements.email, elements.phone, elements.department, elements.mentorshipArea, elements.message];
+
+      fields.forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('error');
+          isValid = false;
+        } else {
+          field.classList.remove('error');
+        }
+      });
+
+      if (elements.email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(elements.email.value)) {
+        elements.email.classList.add('error');
+        isValid = false;
+      }
+
+      if (elements.phone.value && !validatePhoneNumber(elements.phone.value)) {
+        showPhoneError('Please enter a valid 10-digit Indian mobile number');
+        isValid = false;
+      }
+
+      return isValid;
+    };
+
+    const getWhatsAppMessage = () => {
+      const message = `
+        *Mentorship Request*
+        Full Name: ${elements.fullName.value}
+        Email: ${elements.email.value}
+        Phone: +91${elements.phone.value}
+        Department: ${elements.department.value}
+        Mentorship Area: ${elements.mentorshipArea.value}
+        Message: ${elements.message.value}
+      `;
+      return encodeURIComponent(message);
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (validateForm()) {
+        const phoneNumber = '+918148916824'; // Your WhatsApp number
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${getWhatsAppMessage()}`;
+        window.open(whatsappURL, '_blank'); // Opens WhatsApp in a new tab
+        elements.form.style.display = 'none';
+        elements.successMessage.classList.add('active');
+        // Reset form and allow resubmission after a delay
+        setTimeout(() => {
+          elements.form.style.display = 'flex';
+          elements.successMessage.classList.remove('active');
+          elements.form.reset();
+        }, 3000);
+      }
+    };
+
+    // Load Theme
+    const loadTheme = () => {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.body.classList.remove('dark-mode', 'light-mode');
+      document.body.classList.add(theme + '-mode');
+      updateThemeIcons(theme === 'dark');
+    };
+
+    // Event Listeners
+    elements.phone.addEventListener('input', () => {
+      elements.phone.value = elements.phone.value.replace(/[^0-9]/g, '').slice(0, 10);
+    });
+
+    elements.form.addEventListener('submit', handleSubmit);
+    elements.toggleThemeBtn.addEventListener('click', toggleTheme);
+    elements.titleIcon.addEventListener('click', toggleTheme);
+    elements.titleIcon.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') toggleTheme();
+    });
+
+    window.addEventListener('load', loadTheme);
+  </script>
+</body>
+</html>
